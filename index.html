@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinay Dhiman — Brand Identity Kit</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="128" height="128" rx="28" fill="#F8FAFC"/>
+          <rect x="2" y="2" width="124" height="124" rx="26" stroke="#0F172A" stroke-opacity="0.1" stroke-width="4"/>
+          <path d="M32 44L48 84L64 44" stroke="#3B82F6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 44H84C92.8366 44 100 51.1634 100 60V68C100 76.8366 92.8366 84 84 84H68V44Z" stroke="#6366F1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">Identity Kit</h1>
+        <p class="brand-subtitle">Vinay Dhiman — Week 3 Foundations</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-outline" id="copyStyleNoteBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Copy Claude Style Note
+      </button>
+      <button class="btn btn-primary" id="copyCssVariablesBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18L22 12L16 6M8 6L2 12L8 18"/></svg>
+        Export CSS Tokens
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Section 1: Color Palette Grid -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2>1. Color Palette System</h2>
+          <p class="section-desc">Strict 4-color system. Click any swatch to copy its Hex code.</p>
+        </div>
+        <span class="badge">4 Core Colors</span>
+      </div>
+
+      <div class="palette-grid">
+        <!-- Color 1 -->
+        <div class="color-swatch-card" data-color="#F8FAFC">
+          <div class="swatch-preview" style="background-color: #F8FAFC; border: 1px solid rgba(15,23,42,0.1);"></div>
+          <div class="swatch-details">
+            <div class="swatch-name">Background</div>
+            <div class="swatch-hex">#F8FAFC</div>
+            <div class="swatch-meta">Slate 50 — Canvas</div>
+          </div>
+        </div>
+
+        <!-- Color 2 -->
+        <div class="color-swatch-card" data-color="#0F172A">
+          <div class="swatch-preview" style="background-color: #0F172A;"></div>
+          <div class="swatch-details">
+            <div class="swatch-name">Text & Headings</div>
+            <div class="swatch-hex">#0F172A</div>
+            <div class="swatch-meta">Slate 900 — Near-Black</div>
+          </div>
+        </div>
+
+        <!-- Color 3 -->
+        <div class="color-swatch-card" data-color="#3B82F6">
+          <div class="swatch-preview" style="background-color: #3B82F6;"></div>
+          <div class="swatch-details">
+            <div class="swatch-name">Main Accent</div>
+            <div class="swatch-hex">#3B82F6</div>
+            <div class="swatch-meta">Electric Slate Blue</div>
+          </div>
+        </div>
+
+        <!-- Color 4 -->
+        <div class="color-swatch-card" data-color="#6366F1">
+          <div class="swatch-preview" style="background-color: #6366F1;"></div>
+          <div class="swatch-details">
+            <div class="swatch-name">Secondary Accent</div>
+            <div class="swatch-hex">#6366F1</div>
+            <div class="swatch-meta">Indigo Highlight</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Typography Playground -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2>2. Typography Pair (Google Fonts)</h2>
+          <p class="section-desc">Interactive font pairing: <strong>Outfit</strong> for headings and <strong>Inter</strong> for body copy.</p>
+        </div>
+        <span class="badge">Outfit + Inter</span>
+      </div>
+
+      <div class="typography-demo">
+        <div class="font-specimen">
+          <span class="specimen-label">Heading Font: Outfit (700)</span>
+          <h3 class="heading-sample" id="headingSample" contenteditable="true">
+            Building Intentional Engineering Systems
+          </h3>
+        </div>
+
+        <div class="font-specimen">
+          <span class="specimen-label">Body Font: Inter (400)</span>
+          <p class="body-sample" id="bodySample" contenteditable="true">
+            A consistent visual identity separates a portfolio that feels intentional from one that feels thrown together. Lock in typography, color palettes, and component tokens once so every page inherits them.
+          </p>
+        </div>
+
+        <div class="font-controls">
+          <label>Heading Size: <span id="headingSizeVal">32px</span>
+            <input type="range" id="headingSizeSlider" min="24" max="48" value="32">
+          </label>
+          <label>Body Size: <span id="bodySizeVal">16px</span>
+            <input type="range" id="bodySizeSlider" min="14" max="20" value="16">
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Logo & Monogram Assets -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2>3. Monogram & Favicon Asset</h2>
+          <p class="section-desc">Geometric 'VD' monogram asset for portfolio header, favicon, and social avatars.</p>
+        </div>
+        <span class="badge">SVG Vector + PNG</span>
+      </div>
+
+      <div class="monogram-flex">
+        <div class="monogram-box">
+          <img src="monogram_logo.png" alt="Vinay Dhiman Monogram" class="monogram-img">
+          <div class="monogram-caption">Generated PNG Asset (512x512)</div>
+        </div>
+
+        <div class="monogram-box">
+          <div class="favicon-preview-strip">
+            <div class="fav-item"><span class="fav-size">16px</span>
+              <img src="monogram_logo.png" width="16" height="16">
+            </div>
+            <div class="fav-item"><span class="fav-size">32px</span>
+              <img src="monogram_logo.png" width="32" height="32">
+            </div>
+            <div class="fav-item"><span class="fav-size">64px</span>
+              <img src="monogram_logo.png" width="64" height="64">
+            </div>
+          </div>
+          <div class="monogram-caption">Live Favicon Scalability Check</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Claude Project Style Note -->
+    <section class="card highlight-card">
+      <div class="card-header">
+        <div>
+          <h2>4. Claude Project Style Note</h2>
+          <p class="section-desc">Add this two-line instruction to your Claude Project Custom Instructions to maintain consistent UI builds.</p>
+        </div>
+      </div>
+
+      <div class="code-box">
+        <pre id="styleNoteText">STYLE & IDENTITY: Headings: Outfit (700/800), Body: Inter (400/500), Code: JetBrains Mono. Palette: Background #F8FAFC, Text/Headings #0F172A, Main Accent #3B82F6, Secondary Accent #6366F1, Cards #FFFFFF.
+MOOD: Minimalist, modern-tech, and high-contrast—a calm, clean aesthetic where engineering output and clear typography are the loudest elements on the page.</pre>
+        <button class="btn btn-sm btn-outline copy-code-btn" id="copyNoteBoxBtn">Copy Text</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>AI Fluency Course — Week 3 Identity Kit | Built for Vinay Dhiman</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
