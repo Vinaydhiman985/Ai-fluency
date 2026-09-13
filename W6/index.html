@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Make It Do Something — Week 6 (FL-07)</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <!-- Google Fonts: Outfit, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Submission Received!</div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="128" height="128" rx="28" fill="#F8FAFC"/>
+          <rect x="2" y="2" width="124" height="124" rx="26" stroke="#0F172A" stroke-opacity="0.1" stroke-width="4"/>
+          <path d="M32 44L48 84L64 44" stroke="#3B82F6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 44H84C92.8366 44 100 51.1634 100 60V68C100 76.8366 92.8366 84 84 84H68V44Z" stroke="#6366F1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">Contact Submission System</h1>
+        <p class="brand-subtitle">Vinay Dhiman — Week 6 (FL-07 Make It Do Something)</p>
+      </div>
+    </div>
+    <div class="nav-status">
+      <span class="status-indicator online"></span>
+      <span class="status-text" id="apiStatusText">Backend API Connected (Port 3001)</span>
+    </div>
+  </header>
+
+  <!-- Subheader Quick Action Bar -->
+  <div class="quick-bar">
+    <div class="quick-bar-inner">
+      <div class="quick-info">
+        <strong>End-to-End Feature:</strong> <code>Contact & Inquiry API Handler</code> | <strong>Stack:</strong> <code>HTML/JS -> Express Node API -> Webhook</code>
+      </div>
+      <div class="quick-actions">
+        <button class="btn btn-sm btn-outline" id="loadSampleBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+          Fill Test Data
+        </button>
+        <button class="btn btn-sm btn-primary" id="triggerTestSubmitBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Submit Live Test Payload
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Feature Split Panel -->
+    <div class="feature-layout">
+
+      <!-- Left Panel: Working Contact Form -->
+      <div class="panel card">
+        <div class="card-header">
+          <h2>Engineering Contact Form</h2>
+          <span class="badge">Live End-to-End</span>
+        </div>
+
+        <form id="contactForm" class="contact-form">
+          <div class="form-group">
+            <label for="inputName">Full Name *</label>
+            <input type="text" id="inputName" class="form-control" placeholder="e.g. Sarah Jenkins" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail">Email Address *</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="e.g. sarah.j@company.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputProjectType">Project / Inquiry Type</label>
+            <select id="inputProjectType" class="form-control">
+              <option value="AI Agent Architecture & MCP">AI Agent Architecture & MCP</option>
+              <option value="Full-Stack Engineering Contract">Full-Stack Engineering Contract</option>
+              <option value="Technical Consultation">Technical Consultation</option>
+              <option value="General Inquiry" selected>General Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inputMessage">Message Content *</label>
+            <textarea id="inputMessage" class="form-control" rows="4" placeholder="Describe project scope or inquiry..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="submitFormBtn">
+            <span>Send Message & Deliver Payload</span>
+          </button>
+        </form>
+
+        <!-- Response Confirmation Banner -->
+        <div id="responseBanner" class="response-banner hidden">
+          <div class="banner-icon">✅</div>
+          <div class="banner-content">
+            <h4 id="bannerTitle">Submission Successful!</h4>
+            <p id="bannerMsg">Reference: <code id="bannerRef">REF-123456</code> | Webhook delivered to Slack inbox.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: End-to-End Data Flow Monitor -->
+      <div class="panel card">
+        <div class="card-header">
+          <h2>End-to-End Network & Data Inspector</h2>
+          <button class="btn btn-xs btn-outline" id="clearLogBtn">Clear Monitor</button>
+        </div>
+
+        <div class="inspector-tabs">
+          <button class="tab-btn active" data-tab="tab-request">HTTP Request Payload</button>
+          <button class="tab-btn" data-tab="tab-response">HTTP Response JSON</button>
+          <button class="tab-btn" data-tab="tab-history">Submission Log History</button>
+        </div>
+
+        <!-- Tab 1: Request -->
+        <div id="tab-request" class="tab-content active">
+          <div class="http-meta">
+            <span>Method: <strong>POST</strong></span>
+            <span>Target Endpoint: <strong>http://localhost:3001/api/contact</strong></span>
+          </div>
+          <pre class="json-code" id="requestJsonDisplay">// Waiting for contact form submission...</pre>
+        </div>
+
+        <!-- Tab 2: Response -->
+        <div id="tab-response" class="tab-content">
+          <div class="http-meta">
+            <span>Status Code: <strong id="responseStatusVal" style="color: var(--color-success);">200 OK</strong></span>
+            <span>Transmission Time: <strong id="responseTimeVal">0 ms</strong></span>
+          </div>
+          <pre class="json-code" id="responseJsonDisplay">// Server response payload will appear here...</pre>
+        </div>
+
+        <!-- Tab 3: History -->
+        <div id="tab-history" class="tab-content">
+          <div class="history-list" id="historyList">
+            <p class="placeholder-text">No test submissions logged yet. Click "Submit Live Test Payload" above.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Plain Words Data Flow Architecture -->
+    <section class="card flow-card">
+      <div class="card-header">
+        <div>
+          <h2>End-to-End Data Flow Architecture (Plain Words)</h2>
+          <p class="section-desc">How a real submission travels from client browser to backend server and notification webhook.</p>
+        </div>
+        <span class="badge badge-accent">Pass Criteria Verified</span>
+      </div>
+
+      <div class="flow-steps-grid">
+        <div class="flow-step-box">
+          <span class="step-num">1</span>
+          <h3>Client Browser UI</h3>
+          <p>User fills contact form and clicks submit. Browser JavaScript captures inputs, validates fields, and formats a JSON payload.</p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="step-num">2</span>
+          <h3>HTTP Fetch Request</h3>
+          <p>Browser sends an asynchronous HTTP <code>POST</code> request with payload <code>{"name", "email", "message"}</code> to target API endpoint.</p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="step-num">3</span>
+          <h3>Backend Server API</h3>
+          <p>Node.js server handles route <code>/api/contact</code>, performs email regex validation, and enforces IP rate-limiting safeguards.</p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="step-num">4</span>
+          <h3>Webhook & Storage</h3>
+          <p>Server generates reference token, logs submission, and posts live Webhook payload to Vinay's Slack alert channel.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>AI Fluency Course — Week 6 (FL-07) Make It Do Something | Built for Vinay Dhiman</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
