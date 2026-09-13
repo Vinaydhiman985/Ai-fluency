@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeScout Agent Specification — Week 5 (FL-06)</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <!-- Google Fonts: Outfit, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="128" height="128" rx="28" fill="#F8FAFC"/>
+          <rect x="2" y="2" width="124" height="124" rx="26" stroke="#0F172A" stroke-opacity="0.1" stroke-width="4"/>
+          <path d="M32 44L48 84L64 44" stroke="#3B82F6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 44H84C92.8366 44 100 51.1634 100 60V68C100 76.8366 92.8366 84 84 84H68V44Z" stroke="#6366F1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">CodeScout Agent Studio</h1>
+        <p class="brand-subtitle">Vinay Dhiman — Week 5 (FL-06 Personal Agent Design Spec)</p>
+      </div>
+    </div>
+    <div class="nav-status">
+      <span class="status-indicator online"></span>
+      <span class="status-text">Claude Project + MCP Protocol Ready</span>
+    </div>
+  </header>
+
+  <!-- Subheader Quick Action Bar -->
+  <div class="quick-bar">
+    <div class="quick-bar-inner">
+      <div class="quick-info">
+        <strong>Agent Persona:</strong> <code>Engineering Workflow & PR Scout</code> | <strong>Scope:</strong> <code>8.5 Build Hours</code>
+      </div>
+      <div class="quick-actions">
+        <button class="btn btn-sm btn-outline" id="copyPromptBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          Copy Agent System Prompt
+        </button>
+        <button class="btn btn-sm btn-primary" id="runEvalsBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run All 5 Eval Test Cases
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Top Architecture Summary Cards -->
+    <section class="overview-grid">
+      <div class="overview-card">
+        <span class="card-icon">🎯</span>
+        <h3>Job To Be Done</h3>
+        <p>Automated PR diff auditing, API breaking change tracking, security scanning, and issue triage.</p>
+        <span class="card-tag tag-primary">Daily Workflow (3-5x/day)</span>
+      </div>
+
+      <div class="overview-card">
+        <span class="card-icon">🔌</span>
+        <h3>Tools & Connectors</h3>
+        <p>GitHub MCP API, Local Filesystem Stdio Server, Terminal Linter, Slack Alerts Webhook.</p>
+        <span class="card-tag tag-secondary">4 MCP Connectors</span>
+      </div>
+
+      <div class="overview-card">
+        <span class="card-icon">🧪</span>
+        <h3>Eval Test Suite</h3>
+        <p>5 pre-build test cases defining triggers, expected outputs, and pass criteria.</p>
+        <span class="card-tag tag-success">5 Evals Configured</span>
+      </div>
+
+      <div class="overview-card">
+        <span class="card-icon">🛡️</span>
+        <h3>Guardrails Engine</h3>
+        <p>Strict confirmation rules for write operations; absolute block on credential leakage.</p>
+        <span class="card-tag tag-warning">Write Approval Required</span>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="spec-nav-tabs">
+      <button class="spec-tab-btn active" data-tab="tab-evals">1. Interactive Eval Testbench</button>
+      <button class="spec-tab-btn" data-tab="tab-prompt">2. System Instructions</button>
+      <button class="spec-tab-btn" data-tab="tab-tools">3. Tools & Access Plan</button>
+      <button class="spec-tab-btn" data-tab="tab-guardrails">4. Guardrails Matrix</button>
+      <button class="spec-tab-btn" data-tab="tab-platform">5. Platform Rationale</button>
+    </div>
+
+    <!-- TAB 1: INTERACTIVE EVAL TESTBENCH -->
+    <div id="tab-evals" class="spec-tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>Pre-Build Evaluation Testbench (5 Cases)</h2>
+            <p class="section-desc">Click any eval case to simulate CodeScout Agent tool execution, reasoning loop, and pass criteria.</p>
+          </div>
+          <span class="badge badge-accent">All 5 Evals Verified</span>
+        </div>
+
+        <div class="eval-layout">
+          <!-- Eval Selectors -->
+          <div class="eval-list">
+            <div class="eval-item active" data-eval="EVAL-1">
+              <span class="eval-id">EVAL-1</span>
+              <div class="eval-info">
+                <strong>Clean PR Review (#104)</strong>
+                <span>CSS Token updates, zero breaking changes</span>
+              </div>
+              <span class="status-badge badge-pass">PASS</span>
+            </div>
+
+            <div class="eval-item" data-eval="EVAL-2">
+              <span class="eval-id">EVAL-2</span>
+              <div class="eval-info">
+                <strong>Breaking API Change Alert</strong>
+                <span>Function signature changed in utils.js</span>
+              </div>
+              <span class="status-badge badge-revise">REVISE</span>
+            </div>
+
+            <div class="eval-item" data-eval="EVAL-3">
+              <span class="eval-id">EVAL-3</span>
+              <div class="eval-info">
+                <strong>Security Token Leakage</strong>
+                <span>Hardcoded API key committed in diff</span>
+              </div>
+              <span class="status-badge badge-block">BLOCK</span>
+            </div>
+
+            <div class="eval-item" data-eval="EVAL-4">
+              <span class="eval-id">EVAL-4</span>
+              <div class="eval-info">
+                <strong>Merge PR Guardrail Check</strong>
+                <span>User requests auto-merge PR #108</span>
+              </div>
+              <span class="status-badge badge-confirm">CONFIRM</span>
+            </div>
+
+            <div class="eval-item" data-eval="EVAL-5">
+              <span class="eval-id">EVAL-5</span>
+              <div class="eval-info">
+                <strong>Low-Context Issue Triage</strong>
+                <span>Vague issue report "Button broken"</span>
+              </div>
+              <span class="status-badge badge-triage">TRIAGE</span>
+            </div>
+          </div>
+
+          <!-- Eval Inspector Panel -->
+          <div class="eval-inspector">
+            <div class="inspector-header">
+              <h3 id="evalTitle">EVAL-1: Clean PR Review (#104)</h3>
+              <button class="btn btn-sm btn-primary" id="runCurrentEvalBtn">Run This Eval Case</button>
+            </div>
+
+            <div class="eval-detail-box">
+              <div class="detail-row">
+                <strong>Input Trigger:</strong>
+                <span id="evalInput">Pull Request #104 submitted: Modifies color tokens in styles.css</span>
+              </div>
+              <div class="detail-row">
+                <strong>Expected MCP Tool Sequence:</strong>
+                <code id="evalTools">github.get_pr_diff -> read_workspace_file</code>
+              </div>
+              <div class="detail-row">
+                <strong>Pass Criteria:</strong>
+                <span id="evalCriteria">Tool sequence executes accurately; verdict is PASS with zero breaking changes flagged.</span>
+              </div>
+            </div>
+
+            <!-- Simulated Output Box -->
+            <div class="simulated-output">
+              <h4>Agent Execution Output Log</h4>
+              <pre class="json-code" id="evalOutputCode">Click "Run This Eval Case" to inspect simulated agent reasoning and output...</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: SYSTEM INSTRUCTIONS -->
+    <div id="tab-prompt" class="spec-tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2>CodeScout Agent — System Instructions (Draft Prompt)</h2>
+          <button class="btn btn-sm btn-outline" id="copyPromptBoxBtn">Copy Text</button>
+        </div>
+        <div class="code-box">
+          <pre id="systemPromptText">You are CodeScout Agent, an autonomous Engineering Workflow & PR Review Scout built for Vinay Dhiman.
+Your mission is to conduct rigorous code reviews, audit PR diffs, verify API contracts, and alert on architectural risks.
+
+OPERATIONAL RULES:
+1. ALWAYS inspect the full file context using `read_workspace_file` before flagging missing imports or broken signatures.
+2. Maintain a strict tone: technical, concise, data-driven, and objective. Avoid filler phrases ("Great job!", "Here is a breakdown").
+3. Always categorize PR reviews into four standard headings:
+   - Executive Verdict (PASS / REVISE / BLOCK)
+   - Architectural & Contract Impact
+   - Security & Performance Audit
+   - Required Action Items
+4. GUARDRAIL CONFIRMATION: You have READ-ONLY permission by default. You MUST request explicit confirmation from Vinay before executing write actions (merging PRs, closing issues, or posting public repository comments).
+5. STRICT SECURITY: NEVER log, output, or transmit API tokens, passwords, or `.env` file contents under any circumstances.</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: TOOLS & ACCESS PLAN -->
+    <div id="tab-tools" class="spec-tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2>Tools, Connectors & Access Plan</h2>
+          <span class="badge">4 Integrated Tools</span>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Tool / Data Source</th>
+              <th>Primary Purpose</th>
+              <th>Interface Standard</th>
+              <th>Realistic Access Plan & Security Model</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GitHub API</strong></td>
+              <td>Fetch PR diffs, open issues, and commit histories.</td>
+              <td>MCP GitHub Server</td>
+              <td>Personal Access Token (`GITHUB_PAT`) with <code>repo</code> read scope.</td>
+            </tr>
+            <tr>
+              <td><strong>Workspace Filesystem</strong></td>
+              <td>Inspect local codebase files and architectural specs.</td>
+              <td>MCP Stdio File Server</td>
+              <td>Sandboxed to <code>d:\Ai-Fluency\</code> path. Read-only access.</td>
+            </tr>
+            <tr>
+              <td><strong>Static Code Analyzer</strong></td>
+              <td>Execute linters, syntax checks, and unit tests.</td>
+              <td>Terminal Command Connector</td>
+              <td>Subprocess execution with 30s strict timeout limits.</td>
+            </tr>
+            <tr>
+              <td><strong>Slack Webhook</strong></td>
+              <td>Send real-time alerts to <code>#engineering-alerts</code>.</td>
+              <td>HTTP POST Webhook</td>
+              <td>Webhook URL stored in secrets (<code>SLACK_WEBHOOK_URL</code>).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: GUARDRAILS MATRIX -->
+    <div id="tab-guardrails" class="spec-tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2>Risks & Guardrails Action Matrix</h2>
+          <span class="badge badge-accent">Human-in-the-Loop Enforced</span>
+        </div>
+        <div class="guardrails-grid">
+          <div class="guardrail-column col-auto">
+            <h3>Autonomous Actions (Auto-Execute)</h3>
+            <ul>
+              <li>Read workspace files</li>
+              <li>Fetch git diffs & issues</li>
+              <li>Run static linters & syntax checks</li>
+              <li>Draft PR review summaries</li>
+            </ul>
+          </div>
+
+          <div class="guardrail-column col-confirm">
+            <h3>Requires Explicit Confirmation</h3>
+            <ul>
+              <li>Merge PR into <code>main</code> branch</li>
+              <li>Close or delete issues</li>
+              <li>Delete git branches</li>
+              <li>Edit core configuration files</li>
+            </ul>
+          </div>
+
+          <div class="guardrail-column col-blocked">
+            <h3>ABSOLUTELY FORBIDDEN (NEVER)</h3>
+            <ul>
+              <li>Log or transmit API tokens or secrets</li>
+              <li>Force push to git repository (<code>git push -f</code>)</li>
+              <li>Delete GitHub repository</li>
+              <li>Execute unverified remote code</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: PLATFORM RATIONALE -->
+    <div id="tab-platform" class="spec-tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2>Platform Choice & Comparison</h2>
+          <span class="badge">Claude Project Selected</span>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Platform Option</th>
+              <th>Pros</th>
+              <th>Cons</th>
+              <th>Decision Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="selected-row">
+              <td><strong>Claude Project + MCP (CHOSEN)</strong></td>
+              <td>Native MCP integration, high reasoning quality, custom skills.</td>
+              <td>Requires active Claude setup.</td>
+              <td><strong>SELECTED</strong>: Lowest build friction, native stdio file server support.</td>
+            </tr>
+            <tr>
+              <td><strong>Custom GPT (OpenAI)</strong></td>
+              <td>Easy Web UI builder.</td>
+              <td>Weak local file system integration without custom proxy server.</td>
+              <td>Rejected due to constrained local file access.</td>
+            </tr>
+            <tr>
+              <td><strong>n8n Agent Workflow</strong></td>
+              <td>Visual node editor.</td>
+              <td>High overhead for complex code diff reasoning.</td>
+              <td>Rejected due to visual node complexity.</td>
+            </tr>
+            <tr>
+              <td><strong>Scripted Python Agent</strong></td>
+              <td>Total granular control.</td>
+              <td>High build maintenance (>25 hours required).</td>
+              <td>Rejected due to exceeding 10-hour build constraint.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>AI Fluency Course — Week 5 (FL-06) Personal Agent Spec Studio | Built for Vinay Dhiman</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
