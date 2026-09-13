@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Interactive Studio — Week 4 (FL-04)</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <!-- Google Fonts: Outfit, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="128" height="128" rx="28" fill="#F8FAFC"/>
+          <rect x="2" y="2" width="124" height="124" rx="26" stroke="#0F172A" stroke-opacity="0.1" stroke-width="4"/>
+          <path d="M32 44L48 84L64 44" stroke="#3B82F6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 44H84C92.8366 44 100 51.1634 100 60V68C100 76.8366 92.8366 84 84 84H68V44Z" stroke="#6366F1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">MCP Interactive Studio</h1>
+        <p class="brand-subtitle">Vinay Dhiman — Week 4 (FL-04 Model Context Protocol)</p>
+      </div>
+    </div>
+    <div class="nav-status">
+      <span class="status-indicator online"></span>
+      <span class="status-text">MCP Protocol v2024-11-05 Ready</span>
+    </div>
+  </header>
+
+  <!-- Subheader Quick Action Bar -->
+  <div class="quick-bar">
+    <div class="quick-bar-inner">
+      <div class="quick-info">
+        <strong>Server:</strong> <code>ai-fluency-mcp-server</code> | <strong>Transport:</strong> <code>stdio (JSON-RPC 2.0)</code>
+      </div>
+      <div class="quick-actions">
+        <button class="btn btn-sm btn-outline" id="initMcpBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          Re-Initialize Session
+        </button>
+        <button class="btn btn-sm btn-primary" id="runAllToolsBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run All 3 Tasks
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Top Tools Summary Banner -->
+    <section class="tools-grid">
+      <div class="tool-card active" data-tool="read_workspace_file">
+        <div class="tool-card-header">
+          <span class="tool-icon">📁</span>
+          <span class="tool-tag">File System</span>
+        </div>
+        <h3>read_workspace_file</h3>
+        <p>Inspects local workspace files and contents directly from disk.</p>
+        <button class="btn btn-xs btn-outline select-tool-btn">Test Tool 1</button>
+      </div>
+
+      <div class="tool-card" data-tool="get_system_diagnostics">
+        <div class="tool-card-header">
+          <span class="tool-icon">⚡</span>
+          <span class="tool-tag">Diagnostics</span>
+        </div>
+        <h3>get_system_diagnostics</h3>
+        <p>Queries live CPU, memory allocations, OS uptime, and process metrics.</p>
+        <button class="btn btn-xs btn-outline select-tool-btn">Test Tool 2</button>
+      </div>
+
+      <div class="tool-card" data-tool="fetch_live_api">
+        <div class="tool-card-header">
+          <span class="tool-icon">🌐</span>
+          <span class="tool-tag">Live REST API</span>
+        </div>
+        <h3>fetch_live_api</h3>
+        <p>Executes live HTTP GET requests to external web endpoints.</p>
+        <button class="btn btn-xs btn-outline select-tool-btn">Test Tool 3</button>
+      </div>
+    </section>
+
+    <!-- Interactive Execution Split Panel -->
+    <div class="studio-layout">
+
+      <!-- Left Column: Tool Config & Controls -->
+      <div class="panel card">
+        <div class="card-header">
+          <h2>Tool Execution Controls</h2>
+          <span class="badge" id="selectedToolBadge">Tool 1: read_workspace_file</span>
+        </div>
+
+        <!-- Form 1: File Reader -->
+        <div id="form-read_workspace_file" class="tool-form active">
+          <div class="form-group">
+            <label for="filePathInput">Relative Workspace File Path:</label>
+            <select id="filePathInput" class="form-control">
+              <option value="W3/FL-03_Identity_Kit.md">W3/FL-03_Identity_Kit.md</option>
+              <option value="W4/FL-04_Agentic_Workflows_MCP.md" selected>W4/FL-04_Agentic_Workflows_MCP.md</option>
+              <option value="package.json">package.json</option>
+              <option value="W4/mcp_server.js">W4/mcp_server.js</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Maximum Preview Lines: <span id="maxLinesVal">15</span></label>
+            <input type="range" id="maxLinesSlider" min="5" max="50" value="15" class="slider">
+          </div>
+          <button class="btn btn-primary btn-block" id="execFileBtn">
+            Execute <code>read_workspace_file</code>
+          </button>
+        </div>
+
+        <!-- Form 2: System Diagnostics -->
+        <div id="form-get_system_diagnostics" class="tool-form">
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="chkNetwork" checked> Include Network Interfaces</label>
+          </div>
+          <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="chkMemoryDetails" checked> Detailed RAM & CPU Metrics</label>
+          </div>
+          <button class="btn btn-primary btn-block" id="execDiagBtn">
+            Execute <code>get_system_diagnostics</code>
+          </button>
+
+          <!-- Live Metrics Gauges -->
+          <div class="metrics-widget">
+            <h4>Live System Gauges</h4>
+            <div class="metric-row">
+              <span>RAM Memory Usage</span>
+              <span id="ramUsageVal">96.6%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="ramBar" style="width: 96.6%;"></div>
+            </div>
+            <div class="metric-row" style="margin-top: 12px;">
+              <span>CPU Cores Available</span>
+              <span>16 Cores (13th Gen Intel i5)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form 3: Live API Query -->
+        <div id="form-fetch_live_api" class="tool-form">
+          <div class="form-group">
+            <label for="apiUrlInput">Target REST API Endpoint:</label>
+            <input type="text" id="apiUrlInput" class="form-control" value="https://api.github.com/zen">
+          </div>
+          <div class="preset-buttons">
+            <button class="btn btn-xs btn-outline preset-btn" data-url="https://api.github.com/zen">GitHub Zen</button>
+            <button class="btn btn-xs btn-outline preset-btn" data-url="https://httpbin.org/json">HTTPBin Sample</button>
+            <button class="btn btn-xs btn-outline preset-btn" data-url="https://api.github.com/repos/Vinaydhiman985/Ai-fluency">GitHub Repo Info</button>
+          </div>
+          <button class="btn btn-primary btn-block" id="execApiBtn" style="margin-top: 15px;">
+            Execute <code>fetch_live_api</code>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Real-Time JSON-RPC Protocol Inspector -->
+      <div class="panel card">
+        <div class="card-header">
+          <h2>JSON-RPC 2.0 Live Protocol Inspector</h2>
+          <button class="btn btn-xs btn-outline" id="copyLogBtn">Copy Log Payload</button>
+        </div>
+
+        <div class="inspector-tabs">
+          <button class="tab-btn active" data-tab="tab-request">Client Request</button>
+          <button class="tab-btn" data-tab="tab-response">Server Response</button>
+          <button class="tab-btn" data-tab="tab-content">Parsed Output</button>
+        </div>
+
+        <!-- Tab 1: Request -->
+        <div id="tab-request" class="tab-content active">
+          <pre class="json-code" id="requestJsonCode">// Client JSON-RPC 2.0 request payload will appear here upon execution...</pre>
+        </div>
+
+        <!-- Tab 2: Response -->
+        <div id="tab-response" class="tab-content">
+          <pre class="json-code" id="responseJsonCode">// Server JSON-RPC 2.0 response payload will appear here...</pre>
+        </div>
+
+        <!-- Tab 3: Parsed Content -->
+        <div id="tab-content" class="tab-content">
+          <div class="output-preview-box" id="parsedOutputBox">
+            <p class="placeholder-text">Click any execute button to see real-time output content.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Explainer Synthesis Section -->
+    <section class="card explainer-card">
+      <div class="card-header">
+        <div>
+          <h2>FL-04 Technical Synthesis: Workflows vs. Agents & MCP</h2>
+          <p class="section-desc">Key takeaways from the 884-word technical deliverable</p>
+        </div>
+        <span class="badge badge-accent">600–900 Word Target Met (884 Words)</span>
+      </div>
+
+      <div class="explainer-grid">
+        <div class="explainer-box">
+          <h3>Workflows</h3>
+          <p>Fixed, pre-programmed control flow graphs (chains, routers, parallel evaluators). Execution path is hardcoded by developer logic.</p>
+          <span class="tag tag-workflow">FL-04 Status: Deterministic Workflow</span>
+        </div>
+
+        <div class="explainer-box">
+          <h3>Agents</h3>
+          <p>Dynamic, model-driven control flow loop (perception, decision, action, reflection). LLM autonomously selects tools and evaluates outputs.</p>
+          <span class="tag tag-agent">Upgrade Blueprint: Perception-Action Loop</span>
+        </div>
+
+        <div class="explainer-box">
+          <h3>MCP Standard</h3>
+          <p>Open "USB-C interface" for AI applications. Standardizes interactions using 3 primitives: <strong>Tools</strong>, <strong>Resources</strong>, and <strong>Prompts</strong>.</p>
+          <span class="tag tag-mcp">Protocol: JSON-RPC 2.0 over stdio</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>AI Fluency Course — Week 4 (FL-04) MCP Interactive Studio | Built for Vinay Dhiman</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
